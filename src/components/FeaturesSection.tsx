@@ -4,23 +4,23 @@ import { Droplets, Shield, Zap, RefreshCw } from "lucide-react";
 const features = [
   {
     icon: Droplets,
-    title: "Leak-Proof Design",
-    description: "Triple-seal technology ensures zero spills, even when fully shaken.",
+    title: "Leak-Proof",
+    description: "Precision-sealed engineering ensures absolute containment.",
   },
   {
     icon: Shield,
     title: "Premium Materials",
-    description: "BPA-free, food-grade stainless steel built to last a lifetime.",
+    description: "Medical-grade stainless steel with a lifetime guarantee.",
   },
   {
     icon: Zap,
-    title: "Vortex Mixing",
-    description: "Patented mixing technology for perfectly smooth shakes every time.",
+    title: "Vortex Technology",
+    description: "Effortless mixing for perfectly smooth consistency.",
   },
   {
     icon: RefreshCw,
-    title: "Easy Clean",
-    description: "Wide-mouth opening and dishwasher-safe for effortless cleaning.",
+    title: "Easy Maintenance",
+    description: "Thoughtfully designed for effortless daily care.",
   },
 ];
 
@@ -46,31 +46,31 @@ const FeaturesSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="py-32 relative">
+    <section ref={sectionRef} className="py-32 relative border-t border-border/30">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-20">
-          <p className="text-primary uppercase tracking-[0.3em] text-sm font-medium mb-4">
-            Why Choose Us
+        <div className="text-center mb-24">
+          <p className="text-muted-foreground uppercase tracking-[0.4em] text-xs font-medium mb-6">
+            Craftsmanship
           </p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
-            Engineered for <span className="text-gradient">Excellence</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light">
+            Designed with <span className="italic">Intention</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           {features.map((feature, index) => (
             <div
               key={feature.title}
-              className={`group p-8 rounded-2xl bg-card border border-border/30 transition-all duration-500 hover:border-primary/50 ${
+              className={`group text-center ${
                 isVisible ? "animate-fade-up" : "opacity-0"
               }`}
               style={{ animationDelay: `${index * 150}ms` }}
             >
-              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                <feature.icon className="w-7 h-7 text-primary" />
+              <div className="w-16 h-16 mx-auto mb-8 flex items-center justify-center border border-foreground/20 group-hover:border-foreground/40 transition-colors duration-500">
+                <feature.icon className="w-6 h-6 text-foreground/70 group-hover:text-foreground transition-colors duration-500" strokeWidth={1} />
               </div>
-              <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <h3 className="text-lg font-light mb-4 tracking-wide">{feature.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed font-light">
                 {feature.description}
               </p>
             </div>

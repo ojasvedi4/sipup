@@ -30,8 +30,8 @@ const Navbar = () => {
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-bold tracking-tighter">
-            APEX<span className="text-gradient">SHAKE</span>
+          <span className="text-xl font-light tracking-[0.2em] uppercase" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+            sipup<span className="text-muted-foreground">.com</span>
           </span>
         </Link>
 
@@ -41,15 +41,15 @@ const Navbar = () => {
             <Link
               key={link.name}
               to={link.path}
-              className={`relative text-sm uppercase tracking-widest transition-colors duration-300 hover:text-primary ${
+              className={`relative text-xs uppercase tracking-[0.2em] transition-all duration-300 hover:text-foreground ${
                 location.pathname === link.path
-                  ? "text-primary"
-                  : "text-foreground/70"
+                  ? "text-foreground"
+                  : "text-muted-foreground"
               }`}
             >
               {link.name}
               {location.pathname === link.path && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary" />
+                <span className="absolute -bottom-2 left-0 w-full h-px bg-foreground" />
               )}
             </Link>
           ))}

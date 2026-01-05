@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ScrollBottleShowcase from "@/components/ScrollBottleShowcase";
 import FeaturesSection from "@/components/FeaturesSection";
+import UnicornStudioEmbed from "@/components/UnicornStudioEmbed";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -11,6 +12,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <ScrollBottleShowcase />
+        <UnicornStudioEmbed />
         <FeaturesSection />
       </main>
       <Footer />

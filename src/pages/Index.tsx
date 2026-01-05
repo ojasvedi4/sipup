@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import ScrollBottleShowcase from "@/components/ScrollBottleShowcase";
 import FeaturesSection from "@/components/FeaturesSection";
-import ProductShowcase from "@/components/ProductShowcase";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -10,8 +10,8 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
+        <ScrollBottleShowcase />
         <FeaturesSection />
-        <ProductShowcase />
       </main>
       <Footer />
     </div>

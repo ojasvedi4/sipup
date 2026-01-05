@@ -31,6 +31,20 @@ const ScrollBottleShowcase = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [transitionProgress, setTransitionProgress] = useState(0);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+
+  // Preload all images
+  useEffect(() => {
+    const imagePromises = bottles.map((bottle) => {
+      return new Promise<void>((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve();
+        img.src = bottle.image;
+      });
+    });
+
+    Promise.all(imagePromises).then(() => setImagesLoaded(true));
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,7 +58,6 @@ const ScrollBottleShowcase = () => {
       const totalScrollable = containerHeight - viewportHeight;
       const progress = Math.max(0, Math.min(1, scrolled / totalScrollable));
 
-      // Calculate which bottle and the transition progress between bottles
       const exactIndex = progress * (bottles.length - 1);
       const newIndex = Math.min(bottles.length - 1, Math.floor(exactIndex));
       const withinBottleProgress = exactIndex - newIndex;
@@ -59,13 +72,23 @@ const ScrollBottleShowcase = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Calculate opacity for each bottle
+  const getOpacity = (index: number) => {
+    if (index === activeIndex) {
+      return 1 - transitionProgress;
+    }
+    if (index === activeIndex + 1) {
+      return transitionProgress;
+    }
+    return 0;
+  };
+
   return (
     <section
       ref={containerRef}
       className="relative"
       style={{ height: `${bottles.length * 100}vh` }}
     >
-      {/* Sticky container for the bottle */}
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -81,19 +104,14 @@ const ScrollBottleShowcase = () => {
                 {bottles.map((bottle, index) => (
                   <div
                     key={bottle.name}
-                    className="absolute inset-0"
+                    className="absolute inset-0 will-change-transform"
                     style={{
-                      opacity: index === activeIndex 
-                        ? 1 - transitionProgress * 0.5 
+                      opacity: getOpacity(index),
+                      transform: `translateY(${index === activeIndex 
+                        ? -transitionProgress * 20 
                         : index === activeIndex + 1 
-                        ? transitionProgress 
-                        : 0,
-                      transform: index === activeIndex 
-                        ? `translateY(${-transitionProgress * 20}px)` 
-                        : index === activeIndex + 1 
-                        ? `translateY(${20 - transitionProgress * 20}px)` 
-                        : 'translateY(20px)',
-                      transition: 'none',
+                        ? 20 - transitionProgress * 20 
+                        : 20}px)`,
                     }}
                   >
                     <h2 className="text-5xl md:text-7xl lg:text-8xl font-light leading-[0.95] tracking-tight">
@@ -110,14 +128,7 @@ const ScrollBottleShowcase = () => {
                   <p
                     key={bottle.name}
                     className="absolute inset-0 text-muted-foreground text-lg font-light"
-                    style={{
-                      opacity: index === activeIndex 
-                        ? 1 - transitionProgress 
-                        : index === activeIndex + 1 
-                        ? transitionProgress 
-                        : 0,
-                      transition: 'none',
-                    }}
+                    style={{ opacity: getOpacity(index) }}
                   >
                     {bottle.description}
                   </p>
@@ -129,7 +140,7 @@ const ScrollBottleShowcase = () => {
                 {bottles.map((_, index) => (
                   <div
                     key={index}
-                    className="h-px bg-foreground/20 transition-all duration-300"
+                    className="h-px transition-all duration-300"
                     style={{
                       width: index === activeIndex 
                         ? `${48 - transitionProgress * 24}px` 
@@ -145,29 +156,30 @@ const ScrollBottleShowcase = () => {
               </div>
             </div>
 
-            {/* Bottle Image - Smooth crossfade between designs */}
+            {/* Bottle Image - Fixed size container for seamless crossfade */}
             <div className="relative flex items-center justify-center order-1 lg:order-2">
-              <div className="relative w-full max-w-lg aspect-square">
+              <div 
+                className="relative w-[400px] h-[500px] md:w-[450px] md:h-[560px] lg:w-[500px] lg:h-[620px]"
+                style={{ opacity: imagesLoaded ? 1 : 0, transition: 'opacity 0.3s ease' }}
+              >
                 {bottles.map((bottle, index) => (
-                  <img
+                  <div
                     key={bottle.name}
-                    src={bottle.image}
-                    alt={bottle.name}
-                    className="absolute inset-0 w-full h-full object-contain"
-                    style={{
-                      opacity: index === activeIndex 
-                        ? 1 - transitionProgress 
-                        : index === activeIndex + 1 
-                        ? transitionProgress 
-                        : 0,
-                      transition: 'none',
-                    }}
-                  />
+                    className="absolute inset-0 flex items-center justify-center will-change-opacity"
+                    style={{ opacity: getOpacity(index) }}
+                  >
+                    <img
+                      src={bottle.image}
+                      alt={bottle.name}
+                      className="w-full h-full object-contain"
+                      draggable={false}
+                    />
+                  </div>
                 ))}
 
                 {/* Ambient glow effect */}
                 <div 
-                  className="absolute inset-0 opacity-20 blur-3xl pointer-events-none"
+                  className="absolute inset-0 opacity-20 blur-3xl pointer-events-none -z-10"
                   style={{
                     background: "radial-gradient(circle at center, hsl(var(--foreground) / 0.3) 0%, transparent 70%)",
                   }}

@@ -1,9 +1,44 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+
+// Extend window type for UnicornStudio
+declare global {
+  interface Window {
+    UnicornStudio?: {
+      isInitialized: boolean;
+      init: () => void;
+    };
+  }
+}
 
 const HeroSection = () => {
+  useEffect(() => {
+    // Load Unicorn Studio script
+    if (!window.UnicornStudio) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.0/dist/unicornStudio.umd.js";
+      script.onload = function () {
+        if (window.UnicornStudio && !window.UnicornStudio.isInitialized) {
+          window.UnicornStudio.init();
+          window.UnicornStudio.isInitialized = true;
+        }
+      };
+      (document.head || document.body).appendChild(script);
+    } else if (!window.UnicornStudio.isInitialized) {
+      window.UnicornStudio.init();
+      window.UnicornStudio.isInitialized = true;
+    }
+  }, []);
+
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      {/* Unicorn Studio Background */}
+      <div 
+        className="absolute inset-0 w-full h-full opacity-40 pointer-events-none"
+        data-us-project="b2jlSx1K7E4WeEwEDyAO"
+      />
+      
       {/* Content Container */}
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center space-y-10 animate-fade-up max-w-4xl mx-auto">
